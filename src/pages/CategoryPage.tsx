@@ -1,8 +1,10 @@
+import { useState, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { TimetableView } from '../components/TimetableView';
 import { Breadcrumb } from '../components/Breadcrumb';
+import { getOfferings, Offering, USE_MOCK_DATA } from '../lib/api';
 
 interface CategoryPageProps {
   categoryName: string;
@@ -12,81 +14,118 @@ interface CategoryPageProps {
 }
 
 export function CategoryPage({ categoryName, categoryId, onNavigateBack, onCourseClick }: CategoryPageProps) {
-  // サンプルデータ（実際は各カテゴリに応じたデータを渡す）
-  const sampleSlots = [
+  const [offerings, setOfferings] = useState<Offering[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [academicYear] = useState(2026);
+  const [term] = useState('spring');
+
+  // モック授業データ
+  const mockOfferings: Offering[] = [
     {
-      period: 1,
-      day: 0, // 月曜
-      courses: [
-        {
-          id: '1',
-          name: 'マクロ経済学入門',
-          instructor: '山田太郎',
-          format: '対面',
-          level: 'AA' as const,
-        },
-      ],
+      offering_id: 501,
+      subject: { subject_id: 9001, title: '線形代数' },
+      academic_year: 2026,
+      term: '前期',
+      modality: 'onsite',
+      instructor_names: ['山田 太郎', '公大　花子'],
+      rate: 'AA',
+      meetings: [
+        { day: 1, period: 2 },
+        { day: 4, period: 2 }
+      ]
     },
     {
-      period: 1,
-      day: 2, // 水曜
-      courses: [
-        {
-          id: '2',
-          name: '心理学概論',
-          instructor: '佐藤花子',
-          format: '遠隔',
-          level: 'A' as const,
-        },
-      ],
+      offering_id: 502,
+      subject: { subject_id: 9002, title: '微分積分学' },
+      academic_year: 2026,
+      term: '前期',
+      modality: 'onsite',
+      instructor_names: ['佐藤 次郎'],
+      rate: 'A',
+      meetings: [
+        { day: 2, period: 1 }
+      ]
     },
     {
-      period: 2,
-      day: 1, // 火曜
-      courses: [
-        {
-          id: '3',
-          name: '社会学入門',
-          instructor: '鈴木次郎',
-          format: '対面',
-          level: 'B' as const,
-        },
-        {
-          id: '4',
-          name: '哲学基礎',
-          instructor: '田中三郎',
-          format: '遠隔',
-          level: 'A' as const,
-        },
-      ],
-    },
-    {
-      period: 3,
-      day: 3, // 木曜
-      courses: [
-        {
-          id: '5',
-          name: '文化人類学',
-          instructor: '伊藤美咲',
-          format: '対面',
-          level: 'C' as const,
-        },
-      ],
-    },
-    {
-      period: 4,
-      day: 4, // 金曜
-      courses: [
-        {
-          id: '6',
-          name: '現代社会論',
-          instructor: '高橋健一',
-          format: '対面',
-          level: 'AA' as const,
-        },
-      ],
+      offering_id: 503,
+      subject: { subject_id: 9003, title: '情報リテラシー' },
+      academic_year: 2026,
+      term: '前期',
+      modality: 'remote',
+      instructor_names: ['田中 三郎'],
+      rate: 'B',
+      meetings: [
+        { day: 3, period: 3 }
+      ]
     },
   ];
+
+  // 授業データをAPIから取得
+  useEffect(() => {
+    const fetchOfferings = async () => {
+      // モックデータモードの場合はAPI呼び出しをスキップ
+      if (USE_MOCK_DATA) {
+        setOfferings(mockOfferings);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await getOfferings(categoryId, academicYear, term);
+        setOfferings(response.items);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to fetch offerings:', err);
+        console.warn('バックエンドAPIに接続できません。モックデータを使用します。');
+        
+        // モックデータを使用（API接続失敗時のフォールバック）
+        setOfferings(mockOfferings);
+        setError(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOfferings();
+  }, [categoryId, academicYear, term]);
+
+  // APIデータを時間割ビュー用のフォーマットに変換
+  const convertToTimetableSlots = (offerings: Offering[]) => {
+    const slots: any[] = [];
+    
+    offerings.forEach((offering) => {
+      offering.meetings.forEach((meeting) => {
+        // 既存のslotを探す
+        let slot = slots.find(
+          (s) => s.period === meeting.period && s.day === meeting.day - 1 // APIのdayは1始まり、UIは0始まり
+        );
+
+        if (!slot) {
+          slot = {
+            period: meeting.period,
+            day: meeting.day - 1,
+            courses: [],
+          };
+          slots.push(slot);
+        }
+
+        // コースを追加
+        slot.courses.push({
+          id: String(offering.offering_id),
+          name: offering.subject.title,
+          instructor: offering.instructor_names.join('、'),
+          format: offering.modality === 'onsite' ? '対面' : offering.modality === 'remote' ? '遠隔' : 'ハイブリッド',
+          level: offering.rate as 'AA' | 'A' | 'B' | 'C' | 'D' | 'F',
+        });
+      });
+    });
+
+    return slots;
+  };
+
+  const timetableSlots = convertToTimetableSlots(offerings);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -136,7 +175,7 @@ export function CategoryPage({ categoryName, categoryId, onNavigateBack, onCours
 
         {/* 時間割表 */}
         <TimetableView 
-          slots={sampleSlots} 
+          slots={timetableSlots} 
           onCourseClick={onCourseClick}
         />
       </main>

@@ -6,22 +6,39 @@ import { CourseDetailPage } from "./pages/CourseDetailPage";
 import { MyPage } from "./pages/MyPage";
 import { TimetableExamplesPage } from "./pages/TimetableExamplesPage";
 
-type Page = "login" | "top" | "category" | "course-detail" | "mypage" | "timetable-examples";
-type Category = "general" | "second-language" | "foundation" | "first-year-seminar" | "health-sports" | "english" | "specialized";
+type Page =
+  | "login"
+  | "top"
+  | "category"
+  | "course-detail"
+  | "mypage"
+  | "timetable-examples";
+
+// カテゴリのslugタイプ
+type CategorySlug =
+  | "general"
+  | "second-language"
+  | "foundation"
+  | "first-year-seminar"
+  | "health-sports"
+  | "english"
+  | "specialized";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>("top");
-  const [currentCategory, setCurrentCategory] = useState<Category>("general");
+  const [currentCategory, setCurrentCategory] =
+    useState<CategorySlug>("general");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const categoryNames: Record<Category, string> = {
-    "general": "般教（一般教育科目）",
+  // カテゴリ名のマッピング（UIとAPIのslugをマッピング）
+  const categoryNames: Record<CategorySlug, string> = {
+    general: "般教（一般教育科目）",
     "second-language": "第二外国語",
-    "foundation": "基礎教育科目",
+    foundation: "基礎教育科目",
     "first-year-seminar": "初年次ゼミナール",
     "health-sports": "健康・スポーツ科学",
-    "english": "英語",
-    "specialized": "専門科目",
+    english: "英語",
+    specialized: "専門科目",
   };
 
   // ページ切り替え用のナビゲーション（デモ用）
@@ -71,10 +88,14 @@ export default function App() {
           </button>
           <div className="mt-2 pt-2 border-t border-gray-200">
             <button
-              onClick={() => setIsAuthenticated(!isAuthenticated)}
+              onClick={() =>
+                setIsAuthenticated(!isAuthenticated)
+              }
               className="px-3 py-2 rounded-lg bg-green-100 hover:bg-green-200 w-full text-left"
             >
-              {isAuthenticated ? "ログアウト" : "ログイン状態にする"}
+              {isAuthenticated
+                ? "ログアウト"
+                : "ログイン状態にする"}
             </button>
           </div>
         </div>
@@ -94,24 +115,47 @@ export default function App() {
           />
         );
       case "top":
-        return <TopPage onNavigateToMyPage={() => setCurrentPage("mypage")} isAuthenticated={isAuthenticated} />;
+        return (
+          <TopPage
+            onNavigateToMyPage={() => setCurrentPage("mypage")}
+            isAuthenticated={isAuthenticated}
+          />
+        );
       case "mypage":
-        return <MyPage onNavigateToLogin={() => setCurrentPage("login")} isAuthenticated={isAuthenticated} />;
+        return (
+          <MyPage
+            onNavigateToLogin={() => setCurrentPage("login")}
+            isAuthenticated={isAuthenticated}
+          />
+        );
       case "category":
         return (
-          <CategoryPage 
+          <CategoryPage
             categoryName={categoryNames[currentCategory]}
             categoryId={currentCategory}
             onNavigateBack={() => setCurrentPage("top")}
-            onCourseClick={(courseId) => setCurrentPage("course-detail")}
+            onCourseClick={(courseId) =>
+              setCurrentPage("course-detail")
+            }
           />
         );
       case "course-detail":
-        return <CourseDetailPage isAuthenticated={isAuthenticated} />;
+        return (
+          <CourseDetailPage isAuthenticated={isAuthenticated} />
+        );
       case "timetable-examples":
-        return <TimetableExamplesPage onNavigateBack={() => setCurrentPage("top")} />;
+        return (
+          <TimetableExamplesPage
+            onNavigateBack={() => setCurrentPage("top")}
+          />
+        );
       default:
-        return <TopPage onNavigateToMyPage={() => setCurrentPage("mypage")} isAuthenticated={isAuthenticated} />;
+        return (
+          <TopPage
+            onNavigateToMyPage={() => setCurrentPage("mypage")}
+            isAuthenticated={isAuthenticated}
+          />
+        );
     }
   };
 

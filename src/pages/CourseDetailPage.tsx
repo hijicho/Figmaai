@@ -1,18 +1,71 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Heart, CheckCircle, XCircle } from 'lucide-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Breadcrumb } from '../components/Breadcrumb';
+import { getReviews, Review, USE_MOCK_DATA } from '../lib/api';
 
 interface CourseDetailPageProps {
   courseId?: string;
+  offeringId?: number;
   categoryName?: string;
   isAuthenticated?: boolean;
 }
 
-export function CourseDetailPage({ courseId = '1', categoryName = '般教', isAuthenticated = false }: CourseDetailPageProps) {
+export function CourseDetailPage({ courseId = '1', offeringId = 501, categoryName = '般教', isAuthenticated = false }: CourseDetailPageProps) {
   const [isFavorited, setIsFavorited] = useState(false);
   const [selectedYear, setSelectedYear] = useState('2025');
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // モックレビューデータ
+  const mockReviews: Review[] = [
+    {
+      review_id: 3001,
+      md_url: 'https://example.com/reviews/3001.md',
+      status: 'public',
+      author: { user_id: 42, display_name: 'Alice' },
+      created_at: '2026-02-18T12:34:56Z'
+    },
+    {
+      review_id: 3002,
+      md_url: 'https://example.com/reviews/3002.md',
+      status: 'public',
+      author: { user_id: 43, display_name: 'Bob' },
+      created_at: '2026-02-17T10:20:30Z'
+    },
+  ];
+
+  // レビューデータをAPIから取得
+  useEffect(() => {
+    const fetchReviews = async () => {
+      // モックデータモードの場合はAPI呼び出しをスキップ
+      if (USE_MOCK_DATA) {
+        setReviews(mockReviews);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await getReviews(offeringId);
+        setReviews(response.items);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to fetch reviews:', err);
+        console.warn('バックエンドAPIに接続できません。モックデータを使用します。');
+        
+        // モックデータを使用（API接続失敗時のフォールバック）
+        setReviews(mockReviews);
+        setError(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReviews();
+  }, [offeringId]);
 
   // ダミーのお気に入り数
   const favoriteCount = 128;

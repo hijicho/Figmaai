@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { User, LogIn, Heart, Calendar, Share2, Check, X } from 'lucide-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { TimetableView } from '../components/TimetableView';
+import { getMe, UserProfile } from '../lib/api';
 
 interface Course {
   id: string;
@@ -148,6 +149,28 @@ export function MyPage({ onNavigateToLogin, onNavigateToCourse, isAuthenticated 
     }
     alert('みんなの時間割に投稿しました！');
   };
+
+  // ユーザープロフィールを取得
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  useEffect(() => {
+    if (isAuthenticated) {
+      // 実際にはFirebase AuthenticationからIDトークンを取得する
+      // ここではモックとして扱う
+      // const idToken = await firebase.auth().currentUser?.getIdToken();
+      // getMe(idToken).then(profile => {
+      //   setUserProfile(profile);
+      // }).catch(error => {
+      //   console.error('ユーザープロフィールの取得に失敗しました:', error);
+      // });
+      
+      // 仮のユーザープロフィール
+      setUserProfile({
+        user_id: 42,
+        display_name: 'Alice',
+        created_at: '2026-02-18T00:00:00Z'
+      });
+    }
+  }, [isAuthenticated]);
 
   if (!isAuthenticated) {
     return (

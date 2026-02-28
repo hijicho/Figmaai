@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BookOpen, BookMarked, Globe, Calendar, GraduationCap, Languages, ChevronDown, ChevronUp, Activity, Search } from 'lucide-react';
 import { Footer } from '../components/Footer';
 import { ExternalLinkButton } from '../components/ExternalLinkButton';
 import { Header } from '../components/Header';
 import { GlossaryModal } from '../components/GlossaryModal';
+import { getCategories, Category, USE_MOCK_DATA } from '../lib/api';
 import hamubasuLogo from 'figma:asset/59962a0286c10949e8d3fa57e1256b8b69b96d84.png';
 
 interface TopPageProps {
@@ -14,6 +15,50 @@ interface TopPageProps {
 export function TopPage({ onNavigateToMyPage, isAuthenticated = false }: TopPageProps) {
   const [specializedOpen, setSpecializedOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // モックカテゴリデータ
+  const mockCategories: Category[] = [
+    { category_id: 1, slug: 'general', name: '般教' },
+    { category_id: 2, slug: 'second-language', name: '第二外国語' },
+    { category_id: 3, slug: 'foundation', name: '基礎教育科目' },
+    { category_id: 4, slug: 'first-year-seminar', name: '初年次ゼミナール' },
+    { category_id: 5, slug: 'health-sports', name: '健康・スポーツ科学' },
+    { category_id: 6, slug: 'english', name: '英語' },
+    { category_id: 7, slug: 'specialized', name: '専門科目' },
+  ];
+
+  // カテゴリデータをAPIから取得
+  useEffect(() => {
+    const fetchCategories = async () => {
+      // モックデータモードの場合はAPI呼び出しをスキップ
+      if (USE_MOCK_DATA) {
+        setCategories(mockCategories);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await getCategories();
+        setCategories(response.items);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to fetch categories:', err);
+        console.warn('バックエンドAPIに接続できません。モックデータを使用します。');
+        
+        // モックデータを使用（API接続失敗時のフォールバック）
+        setCategories(mockCategories);
+        setError(null); // エラーは非表示にする（モックデータで動作）
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const quickLinks = [
     {
