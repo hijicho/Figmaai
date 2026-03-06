@@ -14,6 +14,7 @@ interface TopPageProps {
 
 export function TopPage({ onNavigateToMyPage, isAuthenticated = false }: TopPageProps) {
   const [specializedOpen, setSpecializedOpen] = useState(false);
+  const [generalOpen, setGeneralOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -62,7 +63,7 @@ export function TopPage({ onNavigateToMyPage, isAuthenticated = false }: TopPage
 
   const quickLinks = [
     {
-      title: '般教（一般教育科目）',
+      title: '般教（総合教養科目）',
       description: '幅広い教養を身につける科目',
       icon: <BookOpen className="w-5 h-5" />,
       href: '/courses/general',
@@ -120,6 +121,12 @@ export function TopPage({ onNavigateToMyPage, isAuthenticated = false }: TopPage
     { name: '商学部', href: '/courses/specialized/commerce' },
   ];
 
+  const campuses = [
+    { name: '杉本キャンパス', href: '/courses/general?campus=sugimoto' },
+    { name: '中百舌鳥キャンパス', href: '/courses/general?campus=nakamozu' },
+    { name: '森之宮キャンパス', href: '/courses/general?campus=morinomiya' },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* ヘッダー */}
@@ -149,19 +156,63 @@ export function TopPage({ onNavigateToMyPage, isAuthenticated = false }: TopPage
 
           {/* カテゴリボタン */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-            {quickLinks.map((link, index) => (
-              <a
-                key={index}
-                href={link.href}
-                className="block p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md hover:border-theme-primary transition-all"
-              >
-                <div className={`w-10 h-10 ${link.color} rounded-lg flex items-center justify-center mb-3`}>
-                  {link.icon}
-                </div>
-                <h3 className="text-sm mb-1">{link.title}</h3>
-                <p className="text-gray-600 text-xs">{link.description}</p>
-              </a>
-            ))}
+            {quickLinks.map((link, index) => {
+              // 般教の場合はアコーディオン機能付きボタン
+              if (index === 0) {
+                return (
+                  <div key={index} className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md hover:border-theme-primary transition-all">
+                    <button
+                      onClick={() => setGeneralOpen(!generalOpen)}
+                      className="w-full p-4 text-left"
+                    >
+                      <div className={`w-10 h-10 ${link.color} rounded-lg flex items-center justify-center mb-3`}>
+                        {link.icon}
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h3 className="text-sm mb-1">{link.title}</h3>
+                          <p className="text-gray-600 text-xs">{link.description}</p>
+                        </div>
+                        {generalOpen ? (
+                          <ChevronUp className="w-4 h-4 text-gray-400 ml-2 flex-shrink-0" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-gray-400 ml-2 flex-shrink-0" />
+                        )}
+                      </div>
+                    </button>
+                    {generalOpen && (
+                      <div className="px-4 pb-4 border-t border-gray-200">
+                        <div className="pt-3 space-y-2">
+                          {campuses.map((campus, campusIndex) => (
+                            <a
+                              key={campusIndex}
+                              href={campus.href}
+                              className="block px-3 py-2 bg-gray-50 rounded-lg hover:bg-theme-primary hover:text-white transition-colors text-center text-sm"
+                            >
+                              {campus.name}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+              // その他のカテゴリは通常のリンク
+              return (
+                <a
+                  key={index}
+                  href={link.href}
+                  className="block p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md hover:border-theme-primary transition-all"
+                >
+                  <div className={`w-10 h-10 ${link.color} rounded-lg flex items-center justify-center mb-3`}>
+                    {link.icon}
+                  </div>
+                  <h3 className="text-sm mb-1">{link.title}</h3>
+                  <p className="text-gray-600 text-xs">{link.description}</p>
+                </a>
+              );
+            })}
           </div>
 
           {/* 専門科目（アコーディオン） */}

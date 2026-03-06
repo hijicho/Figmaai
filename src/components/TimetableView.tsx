@@ -2,6 +2,7 @@
 
 import { ReactNode } from 'react';
 import { Star } from 'lucide-react';
+import { ConfirmButton } from './ConfirmButton';
 
 interface CourseCard {
   id: string;
@@ -11,6 +12,7 @@ interface CourseCard {
   level: 'AA' | 'A' | 'B' | 'C';
   rating?: number; // 平均評価（1-5）
   ratingCount?: number; // 評価数
+  isConfirmed?: boolean; // 確定状態
 }
 
 interface TimetableSlot {
@@ -22,6 +24,7 @@ interface TimetableSlot {
 interface TimetableViewProps {
   slots: TimetableSlot[];
   onCourseClick?: (courseId: string) => void;
+  onConfirmToggle?: (courseId: string) => void; // 確定トグルコールバック
   className?: string;
 }
 
@@ -100,7 +103,7 @@ function StarRating({ rating, count }: { rating?: number; count?: number }) {
   );
 }
 
-export function TimetableView({ slots, onCourseClick, className = '' }: TimetableViewProps) {
+export function TimetableView({ slots, onCourseClick, onConfirmToggle, className = '' }: TimetableViewProps) {
   const days = ['月', '火', '水', '木', '金'];
   const periods = [1, 2, 3, 4, 5];
 
@@ -135,29 +138,43 @@ export function TimetableView({ slots, onCourseClick, className = '' }: Timetabl
                     <td key={dayIndex} className="border border-gray-200 p-2 align-top">
                       <div className="space-y-2">
                         {courses.map((course) => (
-                          <button
+                          <div
                             key={course.id}
-                            onClick={() => onCourseClick?.(course.id)}
-                            className={`w-full p-2 rounded-lg border text-left hover:shadow-md transition-all ${getLevelColor(course.level)}`}
-                            style={getLevelBackgroundStyle(course.level)}
+                            className="relative"
                           >
-                            <div className="text-xs mb-1 line-clamp-2">{course.name}</div>
-                            <div className="text-xs text-gray-600 mb-1">{course.instructor}</div>
+                            <button
+                              onClick={() => onCourseClick?.(course.id)}
+                              className={`w-full p-2 pr-12 rounded-lg border text-left hover:shadow-md transition-all ${getLevelColor(course.level)}`}
+                              style={getLevelBackgroundStyle(course.level)}
+                            >
+                              <div className="text-xs mb-1 line-clamp-2">{course.name}</div>
+                              <div className="text-xs text-gray-600 mb-1">{course.instructor}</div>
+                              
+                              {/* 星評価表示 */}
+                              <div className="mb-1">
+                                <StarRating rating={course.rating} count={course.ratingCount} />
+                              </div>
+                              
+                              <div className="flex items-center gap-2 mt-1">
+                                <span className="text-xs bg-white px-1.5 py-0.5 rounded">
+                                  {course.format}
+                                </span>
+                                <span className={`font-medium ${getLevelBadgeColor(course.level)} font-bold text-[20px]`}>
+                                  Lv: {course.level}
+                                </span>
+                              </div>
+                            </button>
                             
-                            {/* 星評価表示 */}
-                            <div className="mb-1">
-                              <StarRating rating={course.rating} count={course.ratingCount} />
-                            </div>
-                            
-                            <div className="flex items-center gap-2 mt-1">
-                              <span className="text-xs bg-white px-1.5 py-0.5 rounded">
-                                {course.format}
-                              </span>
-                              <span className={`text-xs font-medium ${getLevelBadgeColor(course.level)}`}>
-                                Lv: {course.level}
-                              </span>
-                            </div>
-                          </button>
+                            {/* 確定ボタン（右上に配置） */}
+                            {onConfirmToggle && (
+                              <div className="absolute top-2 right-2">
+                                <ConfirmButton
+                                  isConfirmed={course.isConfirmed || false}
+                                  onClick={() => onConfirmToggle(course.id)}
+                                />
+                              </div>
+                            )}
+                          </div>
                         ))}
                       </div>
                     </td>

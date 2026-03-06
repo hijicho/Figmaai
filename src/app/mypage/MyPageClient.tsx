@@ -95,6 +95,7 @@ export default function MyPageClient() {
         level: course.level,
         rating: course.rating,
         ratingCount: course.ratingCount,
+        isConfirmed: course.isConfirmed, // 確定状態を追加
       }]
     }))
 
@@ -110,6 +111,7 @@ export default function MyPageClient() {
       level: course.level,
       rating: course.rating,
       ratingCount: course.ratingCount,
+      isConfirmed: course.isConfirmed, // 確定状態を追加
     }]
   }))
 
@@ -222,63 +224,8 @@ export default function MyPageClient() {
                 <>
                   <div className="mb-4 bg-theme-primary-light border border-[#2B4DCA] rounded-xl p-4">
                     <p className="text-sm text-gray-700">
-                      各授業の「確定」ボタンを押すと、時間割に確定配置されます。確定された授業のみが「マイ時間割」に表示されます。
+                      時間割グリッド内の各授業カード右上にある「確定」ボタンを押すと、時間割に確定配置されます。確定された授業のみが「マイ時間割」に表示されます。
                     </p>
-                  </div>
-                  
-                  {/* 授業カード一覧 */}
-                  <div className="space-y-4 mb-6">
-                    {favoriteCourses.map((course) => (
-                      <div
-                        key={course.id}
-                        className={`bg-white border-2 rounded-xl p-4 transition-all ${
-                          course.isConfirmed
-                            ? 'border-green-500 bg-green-50'
-                            : 'border-gray-200'
-                        }`}
-                      >
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="flex-1 cursor-pointer" onClick={() => router.push(`/course/${course.id}`)}>
-                            <div className="flex items-center gap-2 mb-2">
-                              <h3 className="text-sm">{course.name}</h3>
-                              {course.isConfirmed && (
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-600 text-white rounded-full text-xs">
-                                  <Check className="w-3 h-3" />
-                                  確定済み
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-xs text-gray-600 mb-2">{course.instructor}</p>
-                            <div className="flex items-center gap-3 text-xs text-gray-500">
-                              <span>{['月', '火', '水', '木', '金'][course.day]}曜{course.period}限</span>
-                              <span>{course.format}</span>
-                              <span className="font-semibold">評価: {course.level}</span>
-                            </div>
-                          </div>
-                          
-                          <button
-                            onClick={() => handleToggleConfirm(course.id)}
-                            className={`flex items-center gap-1 px-4 py-2 rounded-lg transition-colors ${
-                              course.isConfirmed
-                                ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                : 'bg-green-600 text-white hover:bg-green-700'
-                            }`}
-                          >
-                            {course.isConfirmed ? (
-                              <>
-                                <X className="w-4 h-4" />
-                                <span>確定解除</span>
-                              </>
-                            ) : (
-                              <>
-                                <Check className="w-4 h-4" />
-                                <span>確定</span>
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                    ))}
                   </div>
                   
                   {/* 時間割プレビュー */}
@@ -287,6 +234,7 @@ export default function MyPageClient() {
                     onCourseClick={(courseId) => {
                       router.push(`/course/${courseId}`)
                     }}
+                    onConfirmToggle={handleToggleConfirm}
                   />
                 </>
               ) : (
