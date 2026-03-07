@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+//import Link from 'next/link'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 
 export default function LoginPageClient() {
@@ -183,9 +183,9 @@ export default function LoginPageClient() {
                 </div>
 
                 <div className="flex justify-end">
-                  <Link href="/forgot-password" className="text-sm text-gray-600 hover:text-theme-primary">
+                  <a href="/forgot-password" className="text-sm text-gray-600 hover:text-theme-primary">
                     パスワードを忘れた方
-                  </Link>
+                  </a>
                 </div>
 
                 <button
@@ -305,9 +305,9 @@ export default function LoginPageClient() {
                       className="mt-1 w-4 h-4 rounded border-gray-300 text-[#2B4DCA] focus:ring-[#2B4DCA]"
                     />
                     <span className="text-sm text-gray-600">
-                      <Link href="/terms" className="text-theme-primary hover:underline">利用規約</Link>
+                      <a href="/terms" className="text-theme-primary hover:underline">利用規約</a>
                       と
-                      <Link href="/privacy" className="text-theme-primary hover:underline">プライバシーポリシー</Link>
+                      <a href="/privacy" className="text-theme-primary hover:underline">プライバシーポリシー</a>
                       に同意します
                     </span>
                   </label>
@@ -327,9 +327,9 @@ export default function LoginPageClient() {
 
         {/* フッターリンク */}
         <div className="mt-6 text-center text-sm text-gray-600">
-          <Link href="/terms" className="hover:text-theme-primary">利用規約</Link>
+          <a href="/terms" className="hover:text-theme-primary">利用規約</a>
           <span className="mx-2">·</span>
-          <Link href="/privacy" className="hover:text-theme-primary">プライバシーポリシー</Link>
+          <a href="/privacy" className="hover:text-theme-primary">プライバシーポリシー</a>
         </div>
       </div>
     </div>

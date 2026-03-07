@@ -5,7 +5,7 @@ const API_BASE_URL = 'http://localhost:8000/api/v1';
 
 // 開発モード設定
 // バックエンドが未起動の場合、この値をtrueにするとモックデータのみ使用します
-export const USE_MOCK_DATA = true;
+export const USE_MOCK_DATA = false;
 
 // CORS対策:
 // バックエンド側で以下の設定が必要です

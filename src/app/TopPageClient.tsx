@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
+//import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { BookOpen, BookMarked, Globe, Calendar, GraduationCap, Languages, ChevronDown, ChevronUp, Activity, Search } from 'lucide-react'
 import { Footer } from '@/components/Footer'
@@ -103,7 +103,7 @@ export default function TopPageClient() {
           {/* カテゴリボタン */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
             {quickLinks.map((link, index) => (
-              <Link
+              <a
                 key={index}
                 href={link.href}
                 className="block p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md hover:border-theme-primary transition-all"
@@ -113,7 +113,7 @@ export default function TopPageClient() {
                 </div>
                 <h3 className="text-sm mb-1">{link.title}</h3>
                 <p className="text-gray-600 text-xs">{link.description}</p>
-              </Link>
+              </a>
             ))}
           </div>
 
@@ -143,13 +143,13 @@ export default function TopPageClient() {
               <div className="px-4 pb-4 border-t border-gray-200">
                 <div className="pt-4 grid grid-cols-2 md:grid-cols-3 gap-2">
                   {specializedCourses.map((course, index) => (
-                    <Link
+                    <a
                       key={index}
                       href={course.href}
                       className="px-3 py-2 bg-gray-50 rounded-lg hover:bg-theme-primary hover:text-white transition-colors text-center text-sm"
                     >
                       {course.name}
-                    </Link>
+                    </a>
                   ))}
                 </div>
               </div>

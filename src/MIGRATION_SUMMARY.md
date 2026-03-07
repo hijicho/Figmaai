@@ -59,7 +59,7 @@
 |------|------|---------|
 | `next/router` (useRouter) | `next/navigation` (useRouter) | 全クライアントコンポーネント |
 | `window.location.href` | `useRouter().push()` | MyPage, CategoryPage等 |
-| `<a href>` | `<Link href>` from `next/link` | Header, Breadcrumb等 |
+| `<a href>` | `<a href>` from `next/link` | Header, Breadcrumb等 |
 
 ### 4-2. メタデータ
 | 旧方式 | 新方式 | 使用箇所 |
