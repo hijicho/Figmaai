@@ -96,7 +96,7 @@ export function TopPage({ isAuthenticated = false }: TopPageProps) {
   ];
 
   const specializedCourses = [
-    { name: '現代システム科学域', href: '/courses/specialized/modern-system' },
+    { name: '現代システム科学域', href: '/courses/specialized/modern-system', disabled: true },
     { name: '理学部', href: '/courses/specialized/science' },
     { name: '工学部', href: '/courses/specialized/engineering' },
     { name: '農学部', href: '/courses/specialized/agriculture' },
@@ -107,7 +107,7 @@ export function TopPage({ isAuthenticated = false }: TopPageProps) {
     { name: '生活科学部', href: '/courses/specialized/human-life' },
     { name: '文学部', href: '/courses/specialized/literature' },
     { name: '法学部', href: '/courses/specialized/law' },
-    { name: '経済学部', href: '/courses/specialized/economics' },
+    { name: '経済学部', href: '/courses/specialized/economics', disabled: true },
     { name: '商学部', href: '/courses/specialized/commerce' },
   ];
 
@@ -186,13 +186,23 @@ export function TopPage({ isAuthenticated = false }: TopPageProps) {
                 <div className="px-3 pb-3 bg-white">
                   <div className="pt-3 grid grid-cols-2 md:grid-cols-3 gap-2">
                     {specializedCourses.map((course, index) => (
-                      <a
-                        key={index}
-                        href={course.href}
-                        className="px-3 py-2 bg-gray-100 rounded-lg hover:bg-theme-primary-light transition-colors text-center text-xs md:text-sm"
-                      >
-                        {course.name}
-                      </a>
+                      course.disabled ? (
+                        <div
+                          key={index}
+                          className="px-3 py-2 bg-gray-200 rounded-lg text-center text-xs md:text-sm text-gray-500 cursor-not-allowed"
+                        >
+                          <div>{course.name}</div>
+                          <div className="text-xs text-red-600 mt-1">※修正中です</div>
+                        </div>
+                      ) : (
+                        <a
+                          key={index}
+                          href={course.href}
+                          className="px-3 py-2 bg-gray-100 rounded-lg hover:bg-theme-primary-light transition-colors text-center text-xs md:text-sm"
+                        >
+                          {course.name}
+                        </a>
+                      )
                     ))}
                   </div>
                 </div>
