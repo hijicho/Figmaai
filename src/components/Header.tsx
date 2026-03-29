@@ -1,25 +1,16 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react';
-import { Search, Menu, X, BookOpen, User, LogOut } from 'lucide-react';
+import { useState } from 'react';
+import { Menu, X, BookOpen, User, ExternalLink } from 'lucide-react';
 import logoImage from 'figma:asset/e52bb999d689900e37b9d134926cef87854ec798.png';
 
 interface HeaderProps {
-  onSearch?: (query: string) => void;
   isAuthenticated?: boolean;
   onGlossaryOpen?: () => void;
 }
 
-export function Header({ onSearch, isAuthenticated = true, onGlossaryOpen }: HeaderProps) {
+export function Header({ isAuthenticated = true, onGlossaryOpen }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (onSearch) {
-      onSearch(searchQuery);
-    }
-  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
@@ -34,23 +25,20 @@ export function Header({ onSearch, isAuthenticated = true, onGlossaryOpen }: Hea
             />
           </a>
 
-          {/* デスクトップ検索 */}
-          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-2xl">
-            <div className="relative w-full">
-              <input
-                type="text"
-                placeholder="授業名・教員名で検索..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2 pl-10 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B4DCA]"
-              />
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            </div>
-          </form>
+          {/* フォーム入力リンク（デスクトップ） */}
+          <a
+            href="https://forms.gle/Ash6hm2xLsgiwHGh9"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-[#2B4DCA] bg-white text-[#2B4DCA] hover:bg-[#2B4DCA] hover:text-white transition-all duration-200 shadow-sm hover:shadow-md"
+          >
+            <span className="text-sm whitespace-nowrap">2025年度後期のフォーム入力もお願いします</span>
+            <ExternalLink className="w-4 h-4 flex-shrink-0" />
+          </a>
 
           {/* 右側メニュー */}
           <div className="flex items-center gap-2">
-            {isAuthenticated ? (
+            {isAuthenticated && (
               <a
                 href="/mypage"
                 className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-gray-100 transition-colors"
@@ -58,24 +46,6 @@ export function Header({ onSearch, isAuthenticated = true, onGlossaryOpen }: Hea
                 <User className="w-5 h-5" />
                 <span>マイページ</span>
               </a>
-            ) : (
-              <div className="hidden md:flex items-center gap-2">
-                <a
-                  href="/login"
-                  className="px-4 py-2 rounded-xl hover:bg-gray-100 transition-colors"
-                >
-                  ログイン
-                </a>
-                <a
-                  href="/signup"
-                  className="px-4 py-2 text-white rounded-xl transition-colors"
-                  style={{ backgroundColor: 'var(--theme-primary)' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--theme-primary-hover)'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--theme-primary)'}
-                >
-                  新規登録
-                </a>
-              </div>
             )}
 
             {/* 大学用語リンク */}
@@ -115,22 +85,20 @@ export function Header({ onSearch, isAuthenticated = true, onGlossaryOpen }: Hea
           </div>
         </div>
 
-        {/* モバイル検索とメニュー */}
+        {/* モバイルメニュー */}
         {isMenuOpen && (
           <div className="md:hidden mt-4 space-y-4 pb-4 border-t pt-4">
-            <form onSubmit={handleSearch}>
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="授業名・教員名で検索..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-2 pl-10 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-black"
-                />
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              </div>
-            </form>
-            
+            {/* フォーム入力リンク（モバイル） */}
+            <a
+              href="https://forms.gle/Ash6hm2xLsgiwHGh9"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between gap-2 px-4 py-3 rounded-xl border-2 border-[#2B4DCA] bg-white text-[#2B4DCA] hover:bg-[#2B4DCA] hover:text-white transition-all duration-200"
+            >
+              <span className="text-sm">2025年度後期のフォーム入力もお願いします</span>
+              <ExternalLink className="w-4 h-4 flex-shrink-0" />
+            </a>
+
             {/* モバイルメニューリンク */}
             {onGlossaryOpen && (
               <button
@@ -142,7 +110,7 @@ export function Header({ onSearch, isAuthenticated = true, onGlossaryOpen }: Hea
               </button>
             )}
 
-            {isAuthenticated ? (
+            {isAuthenticated && (
               <a
                 href="/mypage"
                 className="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-gray-100"
@@ -150,24 +118,6 @@ export function Header({ onSearch, isAuthenticated = true, onGlossaryOpen }: Hea
                 <User className="w-5 h-5" />
                 <span>マイページ</span>
               </a>
-            ) : (
-              <div className="flex items-center gap-2">
-                <a
-                  href="/login"
-                  className="px-4 py-2 rounded-xl hover:bg-gray-100 transition-colors"
-                >
-                  ログイン
-                </a>
-                <a
-                  href="/signup"
-                  className="px-4 py-2 text-white rounded-xl transition-colors"
-                  style={{ backgroundColor: 'var(--theme-primary)' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--theme-primary-hover)'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--theme-primary)'}
-                >
-                  新規登録
-                </a>
-              </div>
             )}
           </div>
         )}

@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-//import Link from 'next/link'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { BookOpen, BookMarked, Globe, Calendar, GraduationCap, Languages, ChevronDown, ChevronUp, Activity, Search } from 'lucide-react'
+import { BookOpen, BookMarked, Globe, GraduationCap, Languages, ChevronDown, ChevronUp, Search } from 'lucide-react'
 import { Footer } from '@/components/Footer'
 import { ExternalLinkButton } from '@/components/ExternalLinkButton'
 import { Header } from '@/components/Header'
@@ -17,10 +17,24 @@ export default function TopPageClient() {
 
   const quickLinks = [
     {
-      title: '般教（一般教育科目）',
+      title: '総合教養科目（般教）',
       description: '幅広い教養を身につける科目',
       icon: <BookOpen className="w-5 h-5" />,
       href: '/courses/general',
+      color: 'bg-theme-primary-light',
+    },
+    {
+      title: '初年次教育科目（初ゼミ）',
+      description: '大学での学び方を習得',
+      icon: <GraduationCap className="w-5 h-5" />,
+      href: '/courses/first-year-education',
+      color: 'bg-theme-primary-light',
+    },
+    {
+      title: '基礎教育科目',
+      description: '学びの基盤となる科目',
+      icon: <BookMarked className="w-5 h-5" />,
+      href: '/courses/foundation',
       color: 'bg-theme-primary-light',
     },
     {
@@ -28,35 +42,21 @@ export default function TopPageClient() {
       description: 'ドイツ語・フランス語・中国語など',
       icon: <Globe className="w-5 h-5" />,
       href: '/courses/second-language',
-      color: 'bg-purple-50',
+      color: 'bg-theme-primary-light',
     },
     {
-      title: '基礎教育科目',
-      description: '学びの基盤となる科目',
-      icon: <BookMarked className="w-5 h-5" />,
-      href: '/courses/foundation',
-      color: 'bg-pink-50',
-    },
-    {
-      title: '初年次ゼミナール',
-      description: '大学での学び方を習得',
-      icon: <GraduationCap className="w-5 h-5" />,
-      href: '/courses/first-year-seminar',
-      color: 'bg-indigo-50',
-    },
-    {
-      title: '健康・スポーツ科学',
-      description: '心身の健康とスポーツ',
-      icon: <Activity className="w-5 h-5" />,
-      href: '/courses/health-sports',
-      color: 'bg-red-50',
-    },
-    {
-      title: '英語',
+      title: '外国語科目(英語必修)-日本語教師',
       description: 'Academic Englishなど',
       icon: <Languages className="w-5 h-5" />,
       href: '/courses/english',
-      color: 'bg-teal-50',
+      color: 'bg-theme-primary-light',
+    },
+    {
+      title: '外国語科目(英語必修)-英語教師',
+      description: 'Academic Englishなど',
+      icon: <Languages className="w-5 h-5" />,
+      href: '/courses/english-native',
+      color: 'bg-theme-primary-light',
     },
   ]
 
@@ -103,7 +103,7 @@ export default function TopPageClient() {
           {/* カテゴリボタン */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
             {quickLinks.map((link, index) => (
-              <a
+              <Link
                 key={index}
                 href={link.href}
                 className="block p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md hover:border-theme-primary transition-all"
@@ -113,7 +113,7 @@ export default function TopPageClient() {
                 </div>
                 <h3 className="text-sm mb-1">{link.title}</h3>
                 <p className="text-gray-600 text-xs">{link.description}</p>
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -143,35 +143,17 @@ export default function TopPageClient() {
               <div className="px-4 pb-4 border-t border-gray-200">
                 <div className="pt-4 grid grid-cols-2 md:grid-cols-3 gap-2">
                   {specializedCourses.map((course, index) => (
-                    <a
+                    <Link
                       key={index}
                       href={course.href}
                       className="px-3 py-2 bg-gray-50 rounded-lg hover:bg-theme-primary hover:text-white transition-colors text-center text-sm"
                     >
                       {course.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </div>
             )}
-          </div>
-
-          {/* 時間割の例（下段） */}
-          <div className="mb-6">
-            <a
-              href="/timetable-examples"
-              className="block p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md hover:border-theme-primary transition-all"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
-                  <Calendar className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-sm mb-1">みんなの時間割</h3>
-                  <p className="text-gray-600 text-xs">先輩たちの履修パターン</p>
-                </div>
-              </div>
-            </a>
           </div>
 
           {/* 外部リンク */}
@@ -180,18 +162,6 @@ export default function TopPageClient() {
               href="https://hamubasu.com"
               logo={<img src={hamubasuLogo} alt="ハムバス" className="h-full w-auto object-contain" />}
               label="ハムバス"
-            />
-            <ExternalLinkButton
-              href="https://catalog.sp.omu.ac.jp/ja"
-              logo={
-                <div className="w-8 h-8 bg-theme-primary-light rounded-lg flex items-center justify-center">
-                  <div className="relative">
-                    <BookOpen className="w-4 h-4 text-theme-primary" />
-                    <Search className="w-2.5 h-2.5 text-theme-primary absolute -bottom-0.5 -right-0.5" strokeWidth={2.5} />
-                  </div>
-                </div>
-              }
-              label="授業カタログ"
             />
           </div>
 

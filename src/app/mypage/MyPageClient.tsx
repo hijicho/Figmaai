@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-//import Link from 'next/link'
+import Link from 'next/link'
 import { User, LogIn, Heart, Calendar, Share2, Check, X } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
@@ -293,12 +293,12 @@ export default function MyPageClient() {
                 <div className="bg-white border border-gray-200 rounded-xl p-12 text-center">
                   <Heart className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                   <p className="text-gray-600 mb-4">お気に入りした授業がここに表示されます</p>
-                  <a 
+                  <Link 
                     href="/"
                     className="inline-block px-6 py-3 btn-theme-primary rounded-xl"
                   >
                     カテゴリから探す
-                  </a>
+                  </Link>
                 </div>
               )}
             </div>

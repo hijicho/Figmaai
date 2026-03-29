@@ -5,7 +5,7 @@ const API_BASE_URL = 'http://localhost:8000/api/v1';
 
 // 開発モード設定
 // バックエンドが未起動の場合、この値をtrueにするとモックデータのみ使用します
-export const USE_MOCK_DATA = false;
+export const USE_MOCK_DATA = true;
 
 // CORS対策:
 // バックエンド側で以下の設定が必要です
@@ -97,6 +97,8 @@ export async function getDefaultAcademicYear(): Promise<DefaultAcademicYearRespo
 export interface Subject {
   subject_id: number;
   title: string;
+  course_code?: string; // コース番号（例：1GBA001003）
+  credits?: number; // 単位数（例：2.0）
 }
 
 export interface Meeting {

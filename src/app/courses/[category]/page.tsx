@@ -6,7 +6,7 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
     'general': '般教（一般教育科目）',
     'second-language': '第二外国語',
     'foundation': '基礎教育科目',
-    'first-year-seminar': '初年次ゼミナール',
+    'first-year-seminar': '初年次教育科目（初ゼミ）',
     'health-sports': '健康・スポーツ科学',
     'english': '英語',
     'specialized': '専門科目',

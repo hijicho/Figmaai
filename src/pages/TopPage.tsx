@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { BookOpen, BookMarked, Globe, Calendar, GraduationCap, Languages, ChevronDown, ChevronUp, Activity, Search } from 'lucide-react';
+import Link from 'next/link';
 import { Footer } from '../components/Footer';
 import { ExternalLinkButton } from '../components/ExternalLinkButton';
 import { Header } from '../components/Header';
 import { GlossaryModal } from '../components/GlossaryModal';
 import { getCategories, Category, USE_MOCK_DATA } from '../lib/api';
 import hamubasuLogo from 'figma:asset/59962a0286c10949e8d3fa57e1256b8b69b96d84.png';
+import bgPattern from 'figma:asset/c00c039666ebe180d57a090c8744e0552d438ca4.png';
+import titleImage from 'figma:asset/573ad896cd92b11ef07ccb64a98726dc7a7aab11.png';
 
 interface TopPageProps {
   onNavigateToMyPage?: () => void;
@@ -24,7 +27,7 @@ export function TopPage({ onNavigateToMyPage, isAuthenticated = false }: TopPage
     { category_id: 1, slug: 'general', name: '般教' },
     { category_id: 2, slug: 'second-language', name: '第二外国語' },
     { category_id: 3, slug: 'foundation', name: '基礎教育科目' },
-    { category_id: 4, slug: 'first-year-seminar', name: '初年次ゼミナール' },
+    { category_id: 4, slug: 'first-year-seminar', name: '初年次教育科目（初ゼミ）' },
     { category_id: 5, slug: 'health-sports', name: '健康・スポーツ科学' },
     { category_id: 6, slug: 'english', name: '英語' },
     { category_id: 7, slug: 'specialized', name: '専門科目' },
@@ -62,46 +65,34 @@ export function TopPage({ onNavigateToMyPage, isAuthenticated = false }: TopPage
 
   const quickLinks = [
     {
-      title: '般教（一般教育科目）',
-      description: '幅広い教養を身につける科目',
+      title: '総合教養科目（般教）',
       icon: <BookOpen className="w-5 h-5" />,
-      href: '/courses/general',
-      color: 'bg-theme-primary-light',
+      href: '/courses/general-education',
     },
     {
-      title: '第二外国語',
-      description: 'ドイツ語・フランス語・中国語など',
-      icon: <Globe className="w-5 h-5" />,
-      href: '/courses/second-language',
-      color: 'bg-theme-primary-light',
+      title: '初年次教育科目（初ゼミ）',
+      icon: <GraduationCap className="w-5 h-5" />,
+      href: '/courses/first-year-education',
     },
     {
       title: '基礎教育科目',
-      description: '学びの基盤となる科目',
       icon: <BookMarked className="w-5 h-5" />,
-      href: '/courses/foundation',
-      color: 'bg-theme-primary-light',
+      href: '/courses/foundation-list',
     },
     {
-      title: '初年次ゼミナール',
-      description: '大学での学び方を習得',
-      icon: <GraduationCap className="w-5 h-5" />,
-      href: '/courses/first-year-seminar',
-      color: 'bg-theme-primary-light',
+      title: '情報リテラシー科目',
+      icon: <Globe className="w-5 h-5" />,
+      href: '/instructors/information-literacy',
     },
     {
-      title: '健康・スポーツ科学',
-      description: '心身の健康とスポーツ',
-      icon: <Activity className="w-5 h-5" />,
-      href: '/courses/health-sports',
-      color: 'bg-theme-primary-light',
-    },
-    {
-      title: '英語',
-      description: 'Academic Englishなど',
+      title: '外国語科目(英語必修)-日本語教師',
       icon: <Languages className="w-5 h-5" />,
-      href: '/courses/english',
-      color: 'bg-theme-primary-light',
+      href: '/instructors/english-japanese',
+    },
+    {
+      title: '外国語科目(英語必修)-英語教師',
+      icon: <Languages className="w-5 h-5" />,
+      href: '/instructors/english-native',
     },
   ];
 
@@ -111,7 +102,8 @@ export function TopPage({ onNavigateToMyPage, isAuthenticated = false }: TopPage
     { name: '工学部', href: '/courses/specialized/engineering' },
     { name: '農学部', href: '/courses/specialized/agriculture' },
     { name: '獣医学部', href: '/courses/specialized/veterinary' },
-    { name: '医学部', href: '/courses/specialized/medicine' },
+    { name: '医学部医学科', href: '/courses/specialized/medicine' },
+    { name: '医学部リハビリテーション学科', href: '/courses/specialized/medical-rehab' },
     { name: '看護学部', href: '/courses/specialized/nursing' },
     { name: '生活科学部', href: '/courses/specialized/human-life' },
     { name: '文学部', href: '/courses/specialized/literature' },
@@ -131,94 +123,82 @@ export function TopPage({ onNavigateToMyPage, isAuthenticated = false }: TopPage
         <div className="max-w-[1440px] mx-auto px-6 py-8">
           {/* 年度表示 */}
           <div className="text-center mb-6">
-            <h1 className="mb-2">2026年度 前期</h1>
-            <p className="text-xs text-gray-500 mt-3">
-              何かあれば @kurobasu_ocu まで連絡を。落単・情報の誤りには一切責任を負いません。
-            </p>
+            <div className="flex justify-center mb-2">
+              <img src={titleImage} alt="2026年度 前期" className="h-12 md:h-16 w-auto" />
+            </div>
+            <p className="text-xs text-gray-500 mt-3">何かあれば @kurobasu_ocu まで連絡を。<br />落単・情報の誤りには一切責任を負いません。</p>
           </div>
 
           {/* 大学用語リンク */}
           <div className="text-center mb-8">
             <button
               onClick={() => setGlossaryOpen(true)}
-              className="text-theme-primary hover:underline inline-flex items-center gap-1"
+              className="text-theme-primary hover:underline inline-flex items-center gap-1 font-bold"
             >
               大学用語はこちら
             </button>
           </div>
 
-          {/* カテゴリボタン */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-            {quickLinks.map((link, index) => (
-              <a
-                key={index}
-                href={link.href}
-                className="block p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md hover:border-theme-primary transition-all"
+          {/* カテゴリボタン＆専門科目セクション - 統一背景 */}
+          <div 
+            className="relative rounded-2xl overflow-hidden mb-6 p-6"
+            style={{
+              backgroundImage: `url(${bgPattern})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          >
+            {/* カテゴリボタン */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+              {quickLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.href}
+                  className="flex items-center gap-3 p-2.5 bg-white rounded-xl hover:shadow-lg transition-all"
+                >
+                  <div className="w-10 h-10 bg-theme-primary-light rounded-lg flex items-center justify-center shrink-0">
+                    {link.icon}
+                  </div>
+                  <h3 className="font-bold leading-tight text-[14px]">{link.title}</h3>
+                </a>
+              ))}
+            </div>
+
+            {/* 専門科目（アコーディオン） */}
+            <div className="rounded-xl overflow-hidden">
+              <button
+                onClick={() => setSpecializedOpen(!specializedOpen)}
+                className="w-full p-3 flex items-center justify-between hover:shadow-lg transition-all bg-white"
               >
-                <div className={`w-10 h-10 ${link.color} rounded-lg flex items-center justify-center mb-3`}>
-                  {link.icon}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-theme-primary-light rounded-lg flex items-center justify-center">
+                    <GraduationCap className="w-5 h-5" style={{ color: '#000000' }} />
+                  </div>
+                  <h3 className="font-bold text-[14px]">専門科目</h3>
                 </div>
-                <h3 className="text-sm mb-1">{link.title}</h3>
-                <p className="text-gray-600 text-xs">{link.description}</p>
-              </a>
-            ))}
-          </div>
-
-          {/* 専門科目（アコーディオン） */}
-          <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6">
-            <button
-              onClick={() => setSpecializedOpen(!specializedOpen)}
-              className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <GraduationCap className="w-5 h-5" />
+                {specializedOpen ? (
+                  <ChevronUp className="w-5 h-5" />
+                ) : (
+                  <ChevronDown className="w-5 h-5" />
+                )}
+              </button>
+              
+              {specializedOpen && (
+                <div className="px-3 pb-3 bg-white">
+                  <div className="pt-3 grid grid-cols-2 md:grid-cols-3 gap-2">
+                    {specializedCourses.map((course, index) => (
+                      <a
+                        key={index}
+                        href={course.href}
+                        className="px-3 py-2 bg-gray-100 rounded-lg hover:bg-theme-primary-light transition-colors text-center text-xs md:text-sm"
+                      >
+                        {course.name}
+                      </a>
+                    ))}
+                  </div>
                 </div>
-                <div className="text-left">
-                  <h3 className="text-sm">専門科目</h3>
-                  <p className="text-gray-600 text-xs">各学部の専門分野の科目</p>
-                </div>
-              </div>
-              {specializedOpen ? (
-                <ChevronUp className="w-5 h-5 text-gray-400" />
-              ) : (
-                <ChevronDown className="w-5 h-5 text-gray-400" />
               )}
-            </button>
-            
-            {specializedOpen && (
-              <div className="px-4 pb-4 border-t border-gray-200">
-                <div className="pt-4 grid grid-cols-2 md:grid-cols-3 gap-2">
-                  {specializedCourses.map((course, index) => (
-                    <a
-                      key={index}
-                      href={course.href}
-                      className="px-3 py-2 bg-gray-50 rounded-lg hover:bg-theme-primary hover:text-white transition-colors text-center text-sm"
-                    >
-                      {course.name}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* みんなの時間割（下段） */}
-          <div className="mb-6">
-            <a
-              href="/timetable-examples"
-              className="block p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md hover:border-theme-primary transition-all"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <Calendar className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-sm mb-1">みんなの時間割</h3>
-                  <p className="text-gray-600 text-xs">先輩たちの履修パターン</p>
-                </div>
-              </div>
-            </a>
+            </div>
           </div>
 
           {/* 外部リンク */}
@@ -240,12 +220,6 @@ export function TopPage({ onNavigateToMyPage, isAuthenticated = false }: TopPage
               }
               label="授業カタログ"
             />
-          </div>
-
-          {/* 広告枠 */}
-          <div className="border border-gray-200 rounded-xl p-8 bg-gray-50 text-center mb-6">
-            <p className="text-xs text-gray-400 mb-2">広告</p>
-            <p className="text-gray-400 text-sm">広告スペース</p>
           </div>
         </div>
       </main>

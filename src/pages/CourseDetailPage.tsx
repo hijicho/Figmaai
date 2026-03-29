@@ -3,7 +3,22 @@ import { Heart, CheckCircle, XCircle } from 'lucide-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Breadcrumb } from '../components/Breadcrumb';
-import { getReviews, Review, USE_MOCK_DATA } from '../lib/api';
+
+// API types defined locally to avoid import issues
+interface ReviewAuthor {
+  user_id: number;
+  display_name: string;
+}
+
+interface Review {
+  review_id: number;
+  md_url: string;
+  status: string;
+  author: ReviewAuthor;
+  created_at: string;
+}
+
+const USE_MOCK_DATA = true;
 
 interface CourseDetailPageProps {
   courseId?: string;
@@ -114,28 +129,28 @@ export function CourseDetailPage({ courseId = '1', offeringId = 501, categoryNam
           { label: course.name },
         ]} />
 
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           {/* 授業名・教員名・評価 */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-8">
-            <div className="flex items-start justify-between gap-4 mb-3">
-              <h1 className="flex-1">{course.name}</h1>
+          <div className="bg-white border border-gray-200 rounded-2xl p-4 md:p-8">
+            <div className="flex items-start justify-between gap-4 mb-2 md:mb-3">
+              <h1 className="flex-1 text-xl md:text-3xl">{course.name}</h1>
               {/* 総合評価バッジ */}
               <span
-                className="px-4 py-2 rounded-xl shrink-0 border-2"
+                className="px-3 py-1 md:px-4 md:py-2 rounded-xl shrink-0 border-2 text-sm md:text-base"
                 style={getRatingStyle(course.rating)}
               >
                 {course.rating}
               </span>
             </div>
-            <p className="text-gray-600 mb-4">担当教員：{course.instructor}</p>
+            <p className="text-gray-600 mb-3 md:mb-4 text-sm md:text-base">担当教員：{course.instructor}</p>
             
             {/* 年度選択 */}
-            <div className="flex flex-wrap gap-2 mb-6">
+            <div className="flex flex-wrap gap-2 mb-4 md:mb-6">
               {years.map((year) => (
                 <button
                   key={year}
                   onClick={() => setSelectedYear(year)}
-                  className={`px-4 py-2 rounded-xl transition-colors ${
+                  className={`px-3 py-1.5 md:px-4 md:py-2 rounded-xl transition-colors text-sm md:text-base ${
                     selectedYear === year
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 hover:bg-gray-200'
@@ -148,30 +163,30 @@ export function CourseDetailPage({ courseId = '1', offeringId = 501, categoryNam
             
             {/* お気に入りボタン */}
             {isAuthenticated ? (
-              <div className="mt-6 flex items-center gap-4">
+              <div className="mt-4 md:mt-6 flex items-center gap-3 md:gap-4">
                 <button
                   onClick={() => setIsFavorited(!isFavorited)}
-                  className={`px-6 py-3 rounded-xl transition-colors flex items-center gap-2 ${
+                  className={`px-4 py-2 md:px-6 md:py-3 rounded-xl transition-colors flex items-center gap-2 text-sm md:text-base ${
                     isFavorited
                       ? 'bg-pink-100 border border-pink-300 text-pink-700 hover:bg-pink-200'
                       : 'bg-blue-600 text-white hover:bg-blue-700'
                   }`}
                 >
-                  <Heart className={`w-5 h-5 ${isFavorited ? 'fill-pink-600' : ''}`} />
+                  <Heart className={`w-4 h-4 md:w-5 md:h-5 ${isFavorited ? 'fill-pink-600' : ''}`} />
                   {isFavorited ? 'お気に入り済み' : 'お気に入りに追加'}
                 </button>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Heart className="w-4 h-4 fill-pink-400 text-pink-400" />
+                <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600">
+                  <Heart className="w-3 h-3 md:w-4 md:h-4 fill-pink-400 text-pink-400" />
                   <span>お気に入り {favoriteCount}人</span>
                 </div>
               </div>
             ) : (
-              <div className="mt-6">
+              <div className="mt-4 md:mt-6">
                 <button
                   disabled
-                  className="px-6 py-3 rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed flex items-center gap-2 border border-gray-200"
+                  className="px-4 py-2 md:px-6 md:py-3 rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed flex items-center gap-2 border border-gray-200 text-sm md:text-base"
                 >
-                  <Heart className="w-5 h-5" />
+                  <Heart className="w-4 h-4 md:w-5 md:h-5" />
                   お気に入りに追加
                 </button>
                 <p className="text-xs text-gray-500 mt-2">
@@ -184,51 +199,51 @@ export function CourseDetailPage({ courseId = '1', offeringId = 501, categoryNam
           {/* 横並び3カード */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* 評価基準 */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-gray-600 text-sm mb-3">評価基準</h3>
-              <p className="text-gray-900">{course.evaluationCriteria}</p>
+            <div className="bg-white border border-gray-200 rounded-2xl p-4 md:p-6">
+              <h3 className="text-gray-600 text-xs md:text-sm mb-2 md:mb-3">評価基準</h3>
+              <p className="text-gray-900 text-sm md:text-base">{course.evaluationCriteria}</p>
             </div>
 
             {/* 前年度授業形態 */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-gray-600 text-sm mb-3">前年度授業形態</h3>
-              <p className="text-gray-900">{course.format}</p>
+            <div className="bg-white border border-gray-200 rounded-2xl p-4 md:p-6">
+              <h3 className="text-gray-600 text-xs md:text-sm mb-2 md:mb-3">前年度授業形態</h3>
+              <p className="text-gray-900 text-sm md:text-base">{course.format}</p>
             </div>
 
             {/* テスト持ち込み */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-gray-600 text-sm mb-3">テスト持ち込み</h3>
-              <p className="text-gray-900">{course.examPolicy}</p>
+            <div className="bg-white border border-gray-200 rounded-2xl p-4 md:p-6">
+              <h3 className="text-gray-600 text-xs md:text-sm mb-2 md:mb-3">テスト持ち込み</h3>
+              <p className="text-gray-900 text-sm md:text-base">{course.examPolicy}</p>
             </div>
           </div>
 
           {/* 良かったところ */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-8">
-            <div className="flex items-center gap-3 mb-4">
+          <div className="bg-white border border-gray-200 rounded-2xl p-4 md:p-8">
+            <div className="flex items-center gap-3 mb-3 md:mb-4">
               <CheckCircle className="w-5 h-5 text-green-600" />
-              <h2>良かったところ</h2>
+              <h2 className="text-base md:text-xl">良かったところ</h2>
             </div>
-            <ul className="space-y-3">
+            <ul className="space-y-2 md:space-y-3">
               {course.pros.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <span className="text-green-600 mt-1">•</span>
-                  <span className="text-gray-700 flex-1">{item}</span>
+                  <span className="text-gray-700 flex-1 text-sm md:text-base">{item}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* 悪かったところ */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-8">
-            <div className="flex items-center gap-3 mb-4">
+          <div className="bg-white border border-gray-200 rounded-2xl p-4 md:p-8">
+            <div className="flex items-center gap-3 mb-3 md:mb-4">
               <XCircle className="w-5 h-5 text-red-600" />
-              <h2>悪かったところ</h2>
+              <h2 className="text-base md:text-xl">悪かったところ</h2>
             </div>
-            <ul className="space-y-3">
+            <ul className="space-y-2 md:space-y-3">
               {course.cons.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <span className="text-red-600 mt-1">•</span>
-                  <span className="text-gray-700 flex-1">{item}</span>
+                  <span className="text-gray-700 flex-1 text-sm md:text-base">{item}</span>
                 </li>
               ))}
             </ul>

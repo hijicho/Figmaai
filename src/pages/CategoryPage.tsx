@@ -20,11 +20,16 @@ export function CategoryPage({ categoryName, categoryId, onNavigateBack, onCours
   const [academicYear] = useState(2026);
   const [term] = useState('spring');
 
-  // モック授業データ
-  const mockOfferings: Offering[] = [
+  // 般教用のモックデータ
+  const generalMockOfferings: Offering[] = [
     {
       offering_id: 501,
-      subject: { subject_id: 9001, title: '線形代数' },
+      subject: { 
+        subject_id: 9001, 
+        title: '線形代数',
+        course_code: '1GBB001101',
+        credits: 2.0
+      },
       academic_year: 2026,
       term: '前期',
       modality: 'onsite',
@@ -32,34 +37,121 @@ export function CategoryPage({ categoryName, categoryId, onNavigateBack, onCours
       rate: 'AA',
       meetings: [
         { day: 1, period: 2 },
-        { day: 4, period: 2 }
+        { day: 5, period: 2 }
       ]
     },
     {
       offering_id: 502,
-      subject: { subject_id: 9002, title: '微分積分学' },
+      subject: { 
+        subject_id: 9002, 
+        title: '微分積分学',
+        course_code: '1GBB001102',
+        credits: 2.0
+      },
       academic_year: 2026,
       term: '前期',
       modality: 'onsite',
       instructor_names: ['佐藤 次郎'],
       rate: 'A',
       meetings: [
-        { day: 2, period: 1 }
+        { day: 3, period: 1 }
       ]
     },
     {
       offering_id: 503,
-      subject: { subject_id: 9003, title: '情報リテラシー' },
+      subject: { 
+        subject_id: 9003, 
+        title: '情報リテラシー',
+        course_code: '1GBB001103',
+        credits: 2.0
+      },
       academic_year: 2026,
       term: '前期',
       modality: 'remote',
       instructor_names: ['田中 三郎'],
       rate: 'B',
       meetings: [
-        { day: 3, period: 3 }
+        { day: 4, period: 3 }
       ]
     },
   ];
+
+  // 初年次教育科目（初ゼミ）用のモックデータ
+  const firstYearSeminarMockOfferings: Offering[] = [
+    {
+      offering_id: 601,
+      subject: { 
+        subject_id: 8001, 
+        title: '人工知能を知り、考える',
+        course_code: '1GBA001003',
+        credits: 2.0
+      },
+      academic_year: 2026,
+      term: '前期',
+      modality: 'onsite',
+      instructor_names: ['増山 直輝'],
+      rate: 'AA',
+      meetings: [
+        { day: 2, period: 2 }
+      ]
+    },
+    {
+      offering_id: 602,
+      subject: { 
+        subject_id: 8002, 
+        title: 'GISを使って地域のことを考えよう',
+        course_code: '1GBA001004',
+        credits: 2.0
+      },
+      academic_year: 2026,
+      term: '前期',
+      modality: 'onsite',
+      instructor_names: ['根本 達也'],
+      rate: 'A',
+      meetings: [
+        { day: 2, period: 5 }
+      ]
+    },
+    {
+      offering_id: 603,
+      subject: { 
+        subject_id: 8003, 
+        title: '日本近現代史の諸問題について',
+        course_code: '1GBA001005',
+        credits: 2.0
+      },
+      academic_year: 2026,
+      term: '前期',
+      modality: 'onsite',
+      instructor_names: ['住友 陽文'],
+      rate: 'A',
+      meetings: [
+        { day: 2, period: 1 }
+      ]
+    },
+    {
+      offering_id: 604,
+      subject: { 
+        subject_id: 8004, 
+        title: '判例を読むー法学や刑事事件が好きな人へー',
+        course_code: '1GBA001007',
+        credits: 2.0
+      },
+      academic_year: 2026,
+      term: '前期',
+      modality: 'onsite',
+      instructor_names: ['松倉 治代'],
+      rate: 'B',
+      meetings: [
+        { day: 2, period: 1 }
+      ]
+    },
+  ];
+
+  // カテゴリに応じてモックデータを選択
+  const mockOfferings = categoryId === 'first-year-seminar' 
+    ? firstYearSeminarMockOfferings 
+    : generalMockOfferings;
 
   // 授業データをAPIから取得
   useEffect(() => {
@@ -114,8 +206,10 @@ export function CategoryPage({ categoryName, categoryId, onNavigateBack, onCours
         // コースを追加
         slot.courses.push({
           id: String(offering.offering_id),
+          courseCode: offering.subject.course_code,
           name: offering.subject.title,
           instructor: offering.instructor_names.join('、'),
+          credits: offering.subject.credits,
           format: offering.modality === 'onsite' ? '対面' : offering.modality === 'remote' ? '遠隔' : 'ハイブリッド',
           level: offering.rate as 'AA' | 'A' | 'B' | 'C' | 'D' | 'F',
         });

@@ -1,11 +1,11 @@
 'use client'
 
-//import Link from 'next/link'
 import { ChevronRight } from 'lucide-react';
 
 interface BreadcrumbItem {
   label: string;
   href?: string;
+  onClick?: () => void;
 }
 
 interface BreadcrumbProps {
@@ -18,8 +18,15 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
       {items.map((item, index) => (
         <div key={index} className="flex items-center gap-2">
           {index > 0 && <ChevronRight className="w-4 h-4" />}
-          {item.href ? (
-            <a href={item.href} className="hover:text-theme-primary transition-colors">
+          {item.onClick ? (
+            <button 
+              onClick={item.onClick}
+              className="hover:text-theme-primary transition-colors cursor-pointer"
+            >
+              {item.label}
+            </button>
+          ) : item.href ? (
+            <a href={item.href} className="hover:text-theme-primary transition-colors cursor-pointer">
               {item.label}
             </a>
           ) : (

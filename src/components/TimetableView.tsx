@@ -8,9 +8,11 @@ interface CourseCard {
   name: string;
   instructor: string;
   format: string; // 対面/遠隔
-  level: 'AA' | 'A' | 'B' | 'C';
+  level?: 'AA' | 'A' | 'B' | 'C'; // オプショナルに変更
   rating?: number; // 平均評価（1-5）
   ratingCount?: number; // 評価数
+  courseCode?: string; // コース番号（例：1GBA001003）
+  credits?: number; // 単位数（例：2.0）
 }
 
 interface TimetableSlot {
@@ -58,15 +60,15 @@ const getLevelBackgroundStyle = (level: string) => {
 const getLevelBadgeColor = (level: string) => {
   switch (level) {
     case 'AA':
-      return 'text-[#fc9c5a]';
+      return 'bg-[#fc9c5a] border-[#fc9c5a] text-white';
     case 'A':
-      return 'text-[#f82501]';
+      return 'bg-[#f82501] border-[#f82501] text-white';
     case 'B':
-      return 'text-[#27ac49]';
+      return 'bg-[#27ac49] border-[#27ac49] text-white';
     case 'C':
-      return 'text-[#22b0ec]';
+      return 'bg-[#22b0ec] border-[#22b0ec] text-white';
     default:
-      return 'text-gray-800';
+      return 'bg-gray-200 border-gray-300 text-gray-800';
   }
 };
 
@@ -112,12 +114,12 @@ export function TimetableView({ slots, onCourseClick, className = '' }: Timetabl
   return (
     <div className={`bg-white border border-gray-200 rounded-xl overflow-hidden ${className}`}>
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse min-w-[800px]">
+        <table className="w-full border-collapse min-w-[600px]">
           <thead className="bg-gray-50 sticky top-0 z-10">
             <tr>
-              <th className="border border-gray-200 p-3 text-sm w-20">時限</th>
+              <th className="border border-gray-200 p-3 text-sm w-16">時限</th>
               {days.map((day, index) => (
-                <th key={index} className="border border-gray-200 p-3 text-sm">
+                <th key={index} className="border border-gray-200 p-3 text-sm max-w-[140px]">
                   {day}
                 </th>
               ))}
@@ -138,24 +140,33 @@ export function TimetableView({ slots, onCourseClick, className = '' }: Timetabl
                           <button
                             key={course.id}
                             onClick={() => onCourseClick?.(course.id)}
-                            className={`w-full p-2 rounded-lg border text-left hover:shadow-md transition-all ${getLevelColor(course.level)}`}
-                            style={getLevelBackgroundStyle(course.level)}
+                            className={`w-full p-2 rounded-lg border text-left hover:shadow-md transition-all relative ${getLevelColor(course.level || '')}`}
+                            style={getLevelBackgroundStyle(course.level || '')}
                           >
-                            <div className="text-xs mb-1 line-clamp-2">{course.name}</div>
-                            <div className="text-xs text-gray-600 mb-1">{course.instructor}</div>
+                            {/* レベルバッジ（右上） */}
+                            {course.level && (
+                              <span className={`absolute top-1.5 right-1.5 text-xs font-bold px-2 py-1 rounded border ${getLevelBadgeColor(course.level)}`}>
+                                {course.level}
+                              </span>
+                            )}
+
+                            {/* 授業名 */}
+                            <div className="text-[11px] mb-1 line-clamp-2 pr-12">{course.name}</div>
                             
-                            {/* 星評価表示 */}
-                            <div className="mb-1">
-                              <StarRating rating={course.rating} count={course.ratingCount} />
-                            </div>
+                            {/* 担当教員 */}
+                            <div className="text-[10px] text-gray-600 mb-1.5">{course.instructor}</div>
                             
-                            <div className="flex items-center gap-2 mt-1">
-                              <span className="text-xs bg-white px-1.5 py-0.5 rounded">
+                            {/* 対面/遠隔と評価数 */}
+                            <div className="flex items-center justify-between">
+                              <span className="text-[10px] bg-white px-1.5 py-0.5 rounded">
                                 {course.format}
                               </span>
-                              <span className={`text-xs font-medium ${getLevelBadgeColor(course.level)}`}>
-                                Lv: {course.level}
-                              </span>
+                              {/* レビュー数（右下） */}
+                              {course.ratingCount !== undefined && (
+                                <span className="text-[10px] text-gray-500">
+                                  {course.ratingCount}件
+                                </span>
+                              )}
                             </div>
                           </button>
                         ))}
@@ -172,7 +183,7 @@ export function TimetableView({ slots, onCourseClick, className = '' }: Timetabl
       {/* 注釈 */}
       <div className="border-t border-gray-200 bg-gray-50 p-3">
         <p className="text-xs text-gray-600">
-          ※ 星評価は評価数が4件以上の授業のみ表示されます。評価数3件以下の場合は「評価数不足」と表示されます。
+          ※ クリックすると授業の詳細ページに移動します。
         </p>
       </div>
     </div>

@@ -1,10 +1,11 @@
 
   import { defineConfig } from 'vite';
-  import react from '@vitejs/plugin-react-swc';
+  import react from '@vitejs/plugin-react';
+  import tailwindcss from '@tailwindcss/vite';
   import path from 'path';
 
   export default defineConfig({
-    plugins: [react()],
+    plugins: [react(), tailwindcss()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
@@ -18,7 +19,9 @@
         'lucide-react@0.487.0': 'lucide-react',
         'input-otp@1.4.2': 'input-otp',
         'figma:asset/e52bb999d689900e37b9d134926cef87854ec798.png': path.resolve(__dirname, './src/assets/e52bb999d689900e37b9d134926cef87854ec798.png'),
+        'figma:asset/c00c039666ebe180d57a090c8744e0552d438ca4.png': path.resolve(__dirname, './src/assets/c00c039666ebe180d57a090c8744e0552d438ca4.png'),
         'figma:asset/59962a0286c10949e8d3fa57e1256b8b69b96d84.png': path.resolve(__dirname, './src/assets/59962a0286c10949e8d3fa57e1256b8b69b96d84.png'),
+        'figma:asset/573ad896cd92b11ef07ccb64a98726dc7a7aab11.png': path.resolve(__dirname, './src/assets/573ad896cd92b11ef07ccb64a98726dc7a7aab11.png'),
         'embla-carousel-react@8.6.0': 'embla-carousel-react',
         'cmdk@1.1.1': 'cmdk',
         'class-variance-authority@0.7.1': 'class-variance-authority',
