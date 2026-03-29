@@ -99,7 +99,6 @@ export function EnglishInstructorDetailPage({ instructorId = 'pollock-timothy-wa
           ],
           others: [
             '大変だが必修なので、何とか課題をやりきって、プレゼンテーションを乗り越える他ない。',
-            'リチャード早く辞めろ',
             '前期試験失敗して中期でこの学科に入ったキミ、履修登録だけして、後期のオンライン再履に回そう！ 真面目に受けるだけ無駄。',
             '1度でも受ければゴミ教員ということがよくわかる。',
           ],
