@@ -6,6 +6,7 @@ import { Breadcrumb } from '../components/Breadcrumb';
 interface CommerceCourseDetailPageProps {
   courseId?: string;
   isAuthenticated?: boolean;
+  onNavigateToList?: () => void;
 }
 
 interface CourseData {
@@ -18,7 +19,7 @@ interface CourseData {
   others: string[];
 }
 
-export function CommerceCourseDetailPage({ courseId = 'accounting-basics-asano', isAuthenticated = false }: CommerceCourseDetailPageProps) {
+export function CommerceCourseDetailPage({ courseId = 'accounting-basics-asano', isAuthenticated = false, onNavigateToList }: CommerceCourseDetailPageProps) {
   const getCourseData = (id: string): CourseData => {
     const courses: Record<string, CourseData> = {
       'accounting-basics-asano': {
@@ -164,7 +165,7 @@ export function CommerceCourseDetailPage({ courseId = 'accounting-basics-asano',
           '先生めちゃいい人やし面白い。友達と協力していい感想レポートが2、3回ある',
           '出席なしで中間レポートも期末テストも出席してなくても困らない。期末テストは実質授業の感想書くだけだった。最初と最後の３回くらい出席すれば何とかなる。最後のほうの授業でテストの内容言ってくれる。最後から２回の授業は出たほうがいいことあるかも',
           '話は面白い',
-          '出なくても授業資料は全てアップしてくれる。教科書をなぞっているだけなので、教科書を見ればいいし，テストはもっとも印象に残ったテーマについて感想？を書きなさいだったのでもはやなくてもいい。教科書の内容がためになる。レポートも時々出されるがほぼすべて友達と協力してもよく、字数も800字だった。',
+          '出なくても授業資料は全てアップしてくれる。教科書をなぞっているだけなの��、教科書を見ればいいし，テストはもっとも印象に残ったテーマについて感想？を書きなさいだったのでもはやなくてもいい。教科書の内容がためになる。レポートも時々出されるがほぼすべて友達と協力してもよく、字数も800字だった。',
         ],
         cons: [
           '出席を取らないので、出席するメリットがない。全授業出席したが、授業飛んだ人と評価は変わらなかった。',
@@ -508,7 +509,7 @@ export function CommerceCourseDetailPage({ courseId = 'accounting-basics-asano',
         cons: [
           '課題で巡見に行かなくてはならない。時間を作って交通費払っていく必要があるから面倒くさい。図書館で本を借りてレポートを作らなくてはならない。',
           '面白くない',
-          '教科書ができるのが遅かったようで、6月中旬に買わされた。(ないと課題やレポートが全て詰む)1ヶ月の為だけに2000円以上する教科書を買わされるのはいかがなものか。レポートがかなりめんどくさい。2000字以上をふたつと、1000字以上をひとつ。コミュカがあるのでほぼ出席必須みたいなもん',
+          '教科���ができるのが遅かったようで、6月中旬に買わされた。(ないと課題やレポートが全て詰む)1ヶ月の為だけに2000円以上する教科書を買わされるのはいかがなものか。レポートがかなりめんどくさい。2000字以上をふたつと、1000字以上をひとつ。コミュカがあるのでほぼ出席必須みたいなもん',
         ],
         others: [
           '最初はmoodleで課題を出していたが、授業で触れられていなかったことをテキトーに書く人が発生してしまったため、紙でのコミュシ提出とより面倒に変わってしまった。履修する人は書く内容には気をつけるべき。',
@@ -522,7 +523,7 @@ export function CommerceCourseDetailPage({ courseId = 'accounting-basics-asano',
         allowedMaterials: '持ち込みなし',
         pros: [
           '内職してても何も言われない。中間テストはマルバツ問題でノー勉でも半分以上の点数を取れる。',
-          '先生が優しい。出席をクリアすれば楽単だと思う。',
+          '先生が優しい。出席をクリアすれば楽��だと思う。',
         ],
         cons: [
           '授業の進め方はあまりスムーズではない。',
@@ -556,7 +557,7 @@ export function CommerceCourseDetailPage({ courseId = 'accounting-basics-asano',
           '授業内容はとても良い。英文での契約や輸出入に関することを学べる。興味がある人にはとてもオススメの授業。またテスト範囲も教えてくれるので勉強すればいい点数取れる。',
         ],
         cons: [
-          '前回の授業内容について小テストがあるので内職しにくい。',
+          '前回の授業内容について小テストがある���で内職しにくい。',
         ],
         others: [
           '特になし',
@@ -630,7 +631,7 @@ export function CommerceCourseDetailPage({ courseId = 'accounting-basics-asano',
         ],
         others: [
           '4回以上休んだらアウト',
-          '外書講読系の中ではだいぶ当たりの授業。パソコン、スマホは使い放題なのでほぼ全員が授業以外のことをしていた。最終授業?テスト当日までの怒涛の暗記が大切。',
+          '外書講読系の中ではだいぶ��たりの授業。パソコン、スマホは使い放題なのでほぼ全員が授業以外のことをしていた。最終授業?テスト当日までの怒涛の暗記が大切。',
         ],
       },
       'corporate-strategy-nakamoto': {
@@ -782,7 +783,7 @@ export function CommerceCourseDetailPage({ courseId = 'accounting-basics-asano',
       <main className="flex-1 max-w-[1440px] mx-auto w-full px-6 py-8">
         <Breadcrumb items={[
           { label: 'トップ', href: '/' },
-          { label: '商学部科目一覧', href: '/courses/commerce' },
+          { label: '商学部科目一覧', onClick: onNavigateToList },
           { label: course.name },
         ]} />
 

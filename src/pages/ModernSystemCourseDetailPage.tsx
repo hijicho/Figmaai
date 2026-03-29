@@ -6,6 +6,7 @@ import { Breadcrumb } from '../components/Breadcrumb';
 interface ModernSystemCourseDetailPageProps {
   courseId?: string;
   isAuthenticated?: boolean;
+  onNavigateToList?: () => void;
 }
 
 interface CourseData {
@@ -19,7 +20,7 @@ interface CourseData {
   others: string[];
 }
 
-export function ModernSystemCourseDetailPage({ courseId = 'marketing-science', isAuthenticated = false }: ModernSystemCourseDetailPageProps) {
+export function ModernSystemCourseDetailPage({ courseId = 'marketing-science', isAuthenticated = false, onNavigateToList }: ModernSystemCourseDetailPageProps) {
   const getCourseData = (id: string): CourseData => {
     const courses: Record<string, CourseData> = {
       'marketing-science': {
@@ -32,7 +33,7 @@ export function ModernSystemCourseDetailPage({ courseId = 'marketing-science', i
           '全体的に楽',
           'おそらく出席は必要ない',
           '毎回の課題と3回のテストを受ければ良い',
-          '自分の時は最後のテストのみ教科書の持ち込みが可能だった',
+          '自分の時は最後のテストのみ教科書の持ち込みが可能���った',
         ],
         cons: [
           '特になし',
@@ -325,7 +326,7 @@ export function ModernSystemCourseDetailPage({ courseId = 'marketing-science', i
       <main className="flex-1 max-w-[1440px] mx-auto w-full px-6 py-8">
         <Breadcrumb items={[
           { label: 'トップ', href: '/' },
-          { label: '現代システム科学域科目一覧', href: '/courses/modern-system-list' },
+          { label: '現代システム科学域科目一覧', onClick: onNavigateToList },
           { label: course.name },
         ]} />
 

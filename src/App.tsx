@@ -263,6 +263,7 @@ export default function App() {
           <ModernSystemCourseDetailPage
             courseId={selectedModernSystemCourseId}
             isAuthenticated={isAuthenticated}
+            onNavigateToList={() => setCurrentPage("modern-system-courses-list")}
           />
         );
       case "general-education-list":
@@ -318,6 +319,7 @@ export default function App() {
           <CommerceCourseDetailPage
             courseId={selectedCommerceCourseId}
             isAuthenticated={isAuthenticated}
+            onNavigateToList={() => setCurrentPage("commerce-courses-list")}
           />
         );
       case "engineering-courses-list":
