@@ -1750,7 +1750,7 @@ export const generalEducationCourses: GeneralEducationCourse[] = [
   {
     id: 'ge-fri-1-001',
     courseName: '心理学入門',
-    instructor: '田端 拓哉 / 中村 敏',
+    instructor: '田端 拓哉',
     courseCode: '1GAB002303',
     day: '金曜日',
     period: '１限目',
@@ -1985,7 +1985,7 @@ export const generalEducationCourses: GeneralEducationCourse[] = [
   {
     id: 'ge-fri-3-003',
     courseName: '現代の部落問題',
-    instructor: '鷹岡 浄進',
+    instructor: '廣岡 浄進',
     courseCode: '1GAF041301',
     day: '金曜日',
     period: '３限目',
