@@ -1,7 +1,7 @@
 
-  # FigmaAI
+  # kurobasu
 
-  This is a code bundle for FigmaAI. The original project is available at https://www.figma.com/design/kx3M4D2Q5y0u1FCWuxh4N1/FigmaAI.
+  This is a course management system.
 
   ## Running the code
 
