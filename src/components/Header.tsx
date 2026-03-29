@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Menu, X, BookOpen, User, ExternalLink } from 'lucide-react';
+import { Menu, X, BookOpen, ExternalLink } from 'lucide-react';
 import logoImage from 'figma:asset/e52bb999d689900e37b9d134926cef87854ec798.png';
 
 interface HeaderProps {
@@ -38,16 +38,6 @@ export function Header({ isAuthenticated = true, onGlossaryOpen }: HeaderProps) 
 
           {/* 右側メニュー */}
           <div className="flex items-center gap-2">
-            {isAuthenticated && (
-              <a
-                href="/mypage"
-                className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-gray-100 transition-colors"
-              >
-                <User className="w-5 h-5" />
-                <span>マイページ</span>
-              </a>
-            )}
-
             {/* 大学用語リンク */}
             {onGlossaryOpen && (
               <button
@@ -108,16 +98,6 @@ export function Header({ isAuthenticated = true, onGlossaryOpen }: HeaderProps) 
                 <BookOpen className="w-5 h-5" />
                 <span>大学用語</span>
               </button>
-            )}
-
-            {isAuthenticated && (
-              <a
-                href="/mypage"
-                className="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-gray-100"
-              >
-                <User className="w-5 h-5" />
-                <span>マイページ</span>
-              </a>
             )}
           </div>
         )}

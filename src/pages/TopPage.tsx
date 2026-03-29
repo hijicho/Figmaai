@@ -11,11 +11,10 @@ import bgPattern from 'figma:asset/c00c039666ebe180d57a090c8744e0552d438ca4.png'
 import titleImage from 'figma:asset/573ad896cd92b11ef07ccb64a98726dc7a7aab11.png';
 
 interface TopPageProps {
-  onNavigateToMyPage?: () => void;
   isAuthenticated?: boolean;
 }
 
-export function TopPage({ onNavigateToMyPage, isAuthenticated = false }: TopPageProps) {
+export function TopPage({ isAuthenticated = false }: TopPageProps) {
   const [specializedOpen, setSpecializedOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);

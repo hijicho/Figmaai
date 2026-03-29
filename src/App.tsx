@@ -3,7 +3,6 @@ import { LoginPage } from "./pages/LoginPage";
 import { TopPage } from "./pages/TopPage";
 import { CategoryPage } from "./pages/CategoryPage";
 import { CourseDetailPage } from "./pages/CourseDetailPage";
-import { MyPage } from "./pages/MyPage";
 import { TimetableExamplesPage } from "./pages/TimetableExamplesPage";
 import { InstructorListPage } from "./pages/InstructorListPage";
 import { InstructorDetailPage } from "./pages/InstructorDetailPage";
@@ -55,7 +54,6 @@ type Page =
   | "top"
   | "category"
   | "course-detail"
-  | "mypage"
   | "timetable-examples"
   | "instructor-list"
   | "instructor-detail"
@@ -148,14 +146,6 @@ export default function App() {
       case "top":
         return (
           <TopPage
-            onNavigateToMyPage={() => setCurrentPage("mypage")}
-            isAuthenticated={isAuthenticated}
-          />
-        );
-      case "mypage":
-        return (
-          <MyPage
-            onNavigateToLogin={() => setCurrentPage("login")}
             isAuthenticated={isAuthenticated}
           />
         );
@@ -479,7 +469,6 @@ export default function App() {
       default:
         return (
           <TopPage
-            onNavigateToMyPage={() => setCurrentPage("mypage")}
             isAuthenticated={isAuthenticated}
           />
         );
@@ -516,8 +505,6 @@ export default function App() {
         setCurrentPage('top');
       } else if (path === '/login') {
         setCurrentPage('login');
-      } else if (path === '/mypage') {
-        setCurrentPage('mypage');
       } else if (path === '/timetable-examples') {
         setCurrentPage('timetable-examples');
       } else if (path === '/courses/general') {
