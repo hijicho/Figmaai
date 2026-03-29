@@ -1,7 +1,7 @@
 
-  # kurobasu
+  # クロバス
 
-  This is a course management system.
+  授業管理システムです。
 
   ## Running the code
 
