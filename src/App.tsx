@@ -2,7 +2,6 @@ import { useState } from "react";
 import { LoginPage } from "./pages/LoginPage";
 import { TopPage } from "./pages/TopPage";
 import { CategoryPage } from "./pages/CategoryPage";
-import { CourseDetailPage } from "./pages/CourseDetailPage";
 import { TimetableExamplesPage } from "./pages/TimetableExamplesPage";
 import { InstructorListPage } from "./pages/InstructorListPage";
 import { InstructorDetailPage } from "./pages/InstructorDetailPage";
@@ -161,8 +160,9 @@ export default function App() {
           />
         );
       case "course-detail":
+        // Generic course-detail route: fall back to top for now (no generic CourseDetailPage in src/pages)
         return (
-          <CourseDetailPage isAuthenticated={isAuthenticated} />
+          <TopPage isAuthenticated={isAuthenticated} />
         );
       case "timetable-examples":
         return (

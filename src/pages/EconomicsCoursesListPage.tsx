@@ -3,6 +3,7 @@ import { Search } from 'lucide-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Breadcrumb } from '../components/Breadcrumb';
+import { economicsCourses } from '../data/economicsCourses';
 
 interface EconomicsCoursesListPageProps {
   isAuthenticated?: boolean;
@@ -12,30 +13,9 @@ interface EconomicsCoursesListPageProps {
 export function EconomicsCoursesListPage({ isAuthenticated = false, onCourseClick }: EconomicsCoursesListPageProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  // 経済学部の科目データ
-  const courses = [
-    { id: 'macro-economics-saito', name: 'マクロ経済学', instructor: '齊藤' },
-    { id: 'micro-economics-hirose', name: 'ミクロ経済学', instructor: '廣瀬' },
-    { id: 'finance-theory-kitano', name: '金融論', instructor: '北野' },
-    { id: 'public-finance-nakaya', name: '財政学', instructor: '中矢' },
-    { id: 'economic-history-maki', name: '経済史', instructor: '牧' },
-    { id: 'economic-policy-matsunaga', name: '経済政策論', instructor: '松永' },
-    { id: 'management-strategy-nakamoto', name: '経営戦略論', instructor: '中本' },
-    { id: 'labor-economics-seo', name: '労働経済学', instructor: '瀬尾' },
-    { id: 'environment-policy-yokemoto', name: '環境政策論', instructor: '除本' },
-    { id: 'public-economics-suzuki', name: '公共経済学', instructor: '鈴木' },
-    { id: 'international-trade-theory-han', name: '国際貿易論', instructor: '韓' },
-    { id: 'game-theory-hirose', name: 'ゲーム理論', instructor: '廣瀬' },
-    { id: 'statistics-tanaka', name: '統計学', instructor: '田中' },
-    { id: 'econometrics-kaneko', name: '計量経済学', instructor: '金子' },
-    { id: 'development-economics-tsuji', name: '開発経済学', instructor: '辻' },
-    { id: 'business-english-yumiba', name: 'Business English', instructor: '弓場' },
-    { id: 'financial-engineering-chen', name: '金融工学', instructor: '陳' },
-    { id: 'china-economy-tsuji', name: '中国経済論', instructor: '辻' },
-    { id: 'marx-economics-iwakuma', name: 'マルクス経済学', instructor: '岩熊' },
-    { id: 'data-science-practice-kaneko', name: 'データサイエンス演習', instructor: '金子' },
-    { id: 'international-trade-han', name: '国際貿易', instructor: '韓' },
-  ];
+  // Build course list directly from canonical economicsCourses data so
+  // name/instructor/id are faithful to the detail source.
+  const courses = Object.entries(economicsCourses).map(([id, v]) => ({ id, name: v.name, instructor: v.instructor }));
 
   // 検索フィルタリング
   const filteredCourses = courses.filter(course => {

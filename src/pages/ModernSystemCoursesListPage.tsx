@@ -3,6 +3,7 @@ import { Search } from 'lucide-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Breadcrumb } from '../components/Breadcrumb';
+import modernSystemCourses from '../data/modernSystemCourses';
 
 interface ModernSystemCoursesListPageProps {
   isAuthenticated?: boolean;
@@ -12,32 +13,20 @@ interface ModernSystemCoursesListPageProps {
 export function ModernSystemCoursesListPage({ isAuthenticated = false, onCourseClick }: ModernSystemCoursesListPageProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  // 現代システム科学域の科目データ
-  const courses = [
-    { id: 'marketing-science', name: 'マーケティングサイエンス', instructor: '辻本' },
-    { id: 'production-system', name: '生産システム科学', instructor: '岩村' },
-    { id: 'algorithm-data-structure', name: 'アルゴリズムとデータ構造', instructor: '柳本' },
-    { id: 'geography-basics', name: '地理学基礎', instructor: '福田' },
-    { id: 'it-business', name: '情報技術と企業活動', instructor: '渡邊' },
-    { id: 'network-basics', name: '情報ネットワーク基礎', instructor: '石橋' },
-    { id: 'kis-exercise1', name: '知識情報システム学演習1', instructor: '小島 ほか' },
-    { id: 'human-sustainability', name: '人間システムとサスティナビリティ', instructor: '牧岡 ほか' },
-    { id: 'info-sustainability', name: '情報システムとサステイナビリティ', instructor: '菅野 ほか' },
-    { id: 'social-sustainability', name: '社会システムとサスティナビリティ', instructor: '西田 ほか' },
-    { id: 'natural-sustainability', name: '自然システムとサスティナビリティ', instructor: '大塚 ほか' },
-    { id: 'ai-a', name: '人工知能A', instructor: '中島' },
-    { id: 'hci', name: 'ヒューマンコンピュータインタラクション', instructor: '林' },
-    { id: 'kis-development', name: '知識情報システムの開発・運営', instructor: '青木' },
-    { id: 'computer-system', name: 'コンピュータシステム', instructor: '太田' },
-  ];
+  // slugify used to generate stable ids/paths from subject names
+  // Use encodeURIComponent so non-latin characters (e.g. Japanese) produce stable, reversible slugs
+  const slugify = (s: string) => encodeURIComponent((s ?? '').trim());
 
-  // 検索フィルタリング
-  const filteredCourses = courses.filter(course => {
+  // Build course list from the canonical JSON data
+  const courses = (modernSystemCourses?.courses ?? []).map((c: any, idx: number) => ({
+    id: slugify(c.subject ?? c.name ?? `course-${idx}`),
+    name: c.subject ?? c.name ?? '',
+    instructor: (c.instructor ?? '') as string,
+  }));
+
+  const filteredCourses = courses.filter((course) => {
     const query = searchQuery.toLowerCase();
-    return (
-      course.name.toLowerCase().includes(query) ||
-      course.instructor.toLowerCase().includes(query)
-    );
+    return course.name.toLowerCase().includes(query) || course.instructor.toLowerCase().includes(query);
   });
 
   const handleCourseClick = (courseId: string) => {
@@ -51,17 +40,13 @@ export function ModernSystemCoursesListPage({ isAuthenticated = false, onCourseC
       <Header isAuthenticated={isAuthenticated} />
 
       <main className="flex-1 max-w-[1440px] mx-auto w-full px-4 md:px-6 py-6 md:py-8">
-        <Breadcrumb items={[
-          { label: 'トップ', href: '/' },
-          { label: '現代システム科学域科目一覧' },
-        ]} />
+        <Breadcrumb items={[{ label: 'トップ', href: '/' }, { label: '現代システム科学域科目一覧' }]} />
 
         <div className="mb-6 md:mb-8">
           <h1 className="text-2xl md:text-3xl mb-2">現代システム科学域科目一覧</h1>
           <p className="text-sm md:text-base text-gray-600">専門科目のレビューを見ることができます</p>
         </div>
 
-        {/* 検索欄（現代システム科学域専用機能） */}
         <div className="mb-6 md:mb-8">
           <div className="relative max-w-2xl mx-auto">
             <div className="relative">
@@ -75,26 +60,22 @@ export function ModernSystemCoursesListPage({ isAuthenticated = false, onCourseC
               />
             </div>
             {searchQuery && (
-              <p className="mt-2 text-xs md:text-sm text-gray-500 text-center">
-                {filteredCourses.length}件の科目が見つかりました
-              </p>
+              <p className="mt-2 text-xs md:text-sm text-gray-500 text-center">{filteredCourses.length}件の科目が見つかりました</p>
             )}
           </div>
         </div>
 
-        {/* 科目一覧カード（2列レイアウト） */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredCourses.map((course) => (
-            <button
+            <a
               key={course.id}
+              href={`/courses/specialized/modern-system/${course.id}`}
               onClick={() => handleCourseClick(course.id)}
               className="bg-white border border-gray-200 rounded-2xl p-4 md:p-6 hover:border-[#2B4DCA] hover:shadow-md transition-all text-left"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
-                  <h3 className="text-base md:text-lg mb-1 text-[#2B4DCA] hover:underline">
-                    {course.name}
-                  </h3>
+                  <h3 className="text-base md:text-lg mb-1 text-[#2B4DCA] hover:underline">{course.name}</h3>
                   <p className="text-xs md:text-sm text-gray-600">担当教員：{course.instructor}</p>
                 </div>
                 <div className="text-gray-400 mt-1">
@@ -103,7 +84,7 @@ export function ModernSystemCoursesListPage({ isAuthenticated = false, onCourseC
                   </svg>
                 </div>
               </div>
-            </button>
+            </a>
           ))}
         </div>
       </main>

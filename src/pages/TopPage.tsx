@@ -96,7 +96,7 @@ export function TopPage({ isAuthenticated = false }: TopPageProps) {
   ];
 
   const specializedCourses = [
-    { name: '現代システム科学域', href: '/courses/specialized/modern-system', disabled: true },
+    { name: '現代システム科学域', href: '/courses/specialized/modern-system' },
     { name: '理学部', href: '/courses/specialized/science' },
     { name: '工学部', href: '/courses/specialized/engineering' },
     { name: '農学部', href: '/courses/specialized/agriculture' },
@@ -107,7 +107,7 @@ export function TopPage({ isAuthenticated = false }: TopPageProps) {
     { name: '生活科学部', href: '/courses/specialized/human-life' },
     { name: '文学部', href: '/courses/specialized/literature' },
     { name: '法学部', href: '/courses/specialized/law' },
-    { name: '経済学部', href: '/courses/specialized/economics', disabled: true },
+  { name: '経済学部', href: '/courses/specialized/economics' },
     { name: '商学部', href: '/courses/specialized/commerce' },
   ];
 
@@ -122,8 +122,8 @@ export function TopPage({ isAuthenticated = false }: TopPageProps) {
         <div className="max-w-[1440px] mx-auto px-6 py-8">
           {/* 年度表示 */}
           <div className="text-center mb-6">
-            <div className="flex justify-center mb-2">
-              <img src={titleImage} alt="2026年度 前期" className="h-12 md:h-16 w-auto" />
+              <div className="flex justify-center mb-2">
+              <img src={titleImage.src ?? titleImage} alt="2026年度 前期" className="h-12 md:h-16 w-auto" />
             </div>
             <p className="text-xs text-gray-500 mt-3">何かあれば @kurobasu_ocu まで連絡を。<br />落単・情報の誤りには一切責任を負いません。</p>
           </div>
@@ -186,7 +186,7 @@ export function TopPage({ isAuthenticated = false }: TopPageProps) {
                 <div className="px-3 pb-3 bg-white">
                   <div className="pt-3 grid grid-cols-2 md:grid-cols-3 gap-2">
                     {specializedCourses.map((course, index) => (
-                      course.disabled ? (
+                      (course as any).disabled ? (
                         <div
                           key={index}
                           className="px-3 py-2 bg-gray-200 rounded-lg text-center text-xs md:text-sm text-gray-500 cursor-not-allowed"
@@ -214,7 +214,7 @@ export function TopPage({ isAuthenticated = false }: TopPageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <ExternalLinkButton
               href="https://hamubasu.com"
-              logo={<img src={hamubasuLogo} alt="ハムバス" className="h-full w-auto object-contain" />}
+              logo={<img src={hamubasuLogo.src ?? hamubasuLogo} alt="ハムバス" className="h-full w-auto object-contain" />}
               label="ハムバス"
             />
             <ExternalLinkButton
